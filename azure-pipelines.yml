@@ -1,0 +1,44 @@
+resources:
+  repositories:
+    - repository: fluent-site # The name used to reference this repository in the checkout step
+      type: github
+      endpoint: fluent-ui
+      name: micahgodbolt/test-gatsby-content
+
+trigger:
+  - master
+
+pr: none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+steps:
+  - checkout: fluent-site
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "10.x"
+    displayName: "Install Node.js"
+
+  - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
+    displayName: "Use Yarn 1.19.x"
+    inputs:
+      versionSpec: 1.19.x
+      checkLatest: true
+      includePrerelease: false
+
+  - script: yarn
+    displayName: yarn install
+
+  - script: yarn build
+    displayName: Build
+
+  - task: AzureUpload@1
+    displayName: "Upload to Azure"
+    inputs:
+      SourcePath: "packages/fabric-website/public"
+      azureSubscription: "UI Fabric (bac044cf-49e1-4843-8dda-1ce9662606c8)"
+      storage: fabsite
+      ContainerName: "$web"
+      BlobPrefix: ""
