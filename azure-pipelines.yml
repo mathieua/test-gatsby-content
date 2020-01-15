@@ -3,7 +3,7 @@ resources:
     - repository: fluent-site # The name used to reference this repository in the checkout step
       type: github
       endpoint: fluent-ui
-      name: micahgodbolt/test-gatsby-content
+      name: microsoft/fluent-site
 
 trigger:
   - master
