@@ -1,0 +1,50 @@
+backend:
+  name: github
+  repo: micahgodbolt/test-gatsby-content
+  branch: master
+  open_authoring: true
+
+publish_mode: editorial_workflow
+
+media_folder: static/assets
+public_folder: assets
+
+collections:
+  - name: components
+    extension: "mdx"
+    format: "frontmatter"
+    label: Components
+    folder: design_docs
+    create: true
+    fields:
+      - { name: title, label: Title }
+      - { name: path, label: Path }
+      - { name: body, label: Body, widget: markdown }
+  - label: "Pages"
+    name: "pages"
+    extension: "mdx"
+    create: true
+    format: "frontmatter"
+    folder: pages
+    fields:
+      - { name: title, label: Title }
+      - { name: path, label: Path }
+      - {
+          label: "Category",
+          name: "category",
+          widget: "relation",
+          collection: "categories",
+          searchFields: ["title"],
+          valueField: "title",
+          displayFields: ["title"],
+          required: false,
+        }
+      - { name: body, label: Body, widget: markdown }
+  - label: "Categories"
+    name: "categories"
+    folder: "content/categories"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    fields:
+      - { label: Title, name: title, widget: string }
